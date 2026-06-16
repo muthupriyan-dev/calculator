@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calc Pro</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root[data-theme="dark"] {
+      --bg:       #111318;
+      --surface:  #1c1f28;
+      --btn:      #252933;
+      --btn-op:   #2e3346;
+      --btn-eq:   #4f6ef7;
+      --btn-eq2:  #3a56e0;
+      --btn-cl:   #3a3f52;
+      --text:     #f0f2f8;
+      --muted:    #6b7280;
+      --display:  #e8ecff;
+      --history-bg: #161922;
+      --history-item: #1e2130;
+      --shadow:   0 8px 32px rgba(0,0,0,.45);
+      --tab-active: #4f6ef7;
+    }
+
+    :root[data-theme="light"] {
+      --bg:       #f0f2f8;
+      --surface:  #ffffff;
+      --btn:      #e8eaf2;
+      --btn-op:   #dde0f0;
+      --btn-eq:   #4f6ef7;
+      --btn-eq2:  #3a56e0;
+      --btn-cl:   #fde8e8;
+      --text:     #1a1d2e;
+      --muted:    #9ca3af;
+      --display:  #1a1d2e;
+      --history-bg: #f5f6fc;
+      --history-item: #eceef8;
+      --shadow:   0 8px 32px rgba(0,0,0,.12);
+      --tab-active: #4f6ef7;
+    }
+
+    body {
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      transition: background .3s;
+      padding: 16px;
+    }
+
+    .wrapper {
+      width: 340px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* ── Top bar ── */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+    }
+
+    .tab {
+      background: var(--btn);
+      border: none;
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      cursor: pointer;
+      transition: background .15s, color .15s;
+    }
+    .tab.active {
+      background: var(--tab-active);
+      color: #fff;
+    }
+
+    .theme-btn {
+      background: var(--btn);
+      border: none;
+      border-radius: 50%;
+      width: 34px; height: 34px;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s;
+      color: var(--text);
+    }
+    .theme-btn:hover { background: var(--btn-op); }
+
+    /* ── Calc card ── */
+    .calc {
+      background: var(--surface);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(128,128,128,.1);
+      transition: background .3s;
+    }
+
+    .display {
+      text-align: right;
+      padding: 8px 4px 16px;
+      margin-bottom: 16px;
+    }
+
+    .expr {
+      font-size: .8rem;
+      color: var(--muted);
+      min-height: 18px;
+      margin-bottom: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .current {
+      font-size: 2.4rem;
+      font-weight: 300;
+      color: var(--display);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      letter-spacing: -1px;
+      transition: font-size .1s;
+    }
+    .current.shrink { font-size: 1.6rem; }
+
+    /* ── Button grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .sci-grid {
+      display: none;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .sci-grid.show { display: grid; }
+
+    button {
+      background: var(--btn);
+      border: none;
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 500;
+      height: 58px;
+      cursor: pointer;
+      transition: background .12s, transform .08s;
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    button:active { transform: scale(.92); }
+    button:not(.op):not(.cl):not(.eq):not(.tab):not(.theme-btn):not(.sci):hover { background: var(--btn-op); }
+
+    button.op {
+      background: var(--btn-op);
+      color: #a5b4fc;
+      font-size: 1.2rem;
+    }
+    button.op:hover { filter: brightness(1.15); }
+
+    button.cl {
+      background: var(--btn-cl);
+      color: #f87171;
+      font-size: .9rem;
+      font-weight: 700;
+    }
+
+    button.eq {
+      background: var(--btn-eq);
+      color: #fff;
+      font-size: 1.3rem;
+      box-shadow: 0 4px 14px rgba(79,110,247,.35);
+    }
+    button.eq:hover { background: var(--btn-eq2); }
+
+    button.wide { grid-column: span 2; }
+
+    button.sci {
+      background: var(--btn);
+      color: #818cf8;
+      font-size: .85rem;
+      font-weight: 600;
+      height: 46px;
+    }
+    button.sci:hover { background: var(--btn-op); }
+
+    /* ── History ── */
+    .history-box {
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(128,128,128,.1);
+      max-height: 220px;
+      overflow-y: auto;
+      transition: background .3s;
+    }
+
+    .history-box::-webkit-scrollbar { width: 4px; }
+    .history-box::-webkit-scrollbar-track { background: transparent; }
+    .history-box::-webkit-scrollbar-thumb { background: var(--btn-op); border-radius: 4px; }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .history-title {
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .clear-hist {
+      font-size: .72rem;
+      color: #f87171;
+      background: none;
+      border: none;
+      cursor: pointer;
+      height: auto;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+    .clear-hist:hover { background: rgba(248,113,113,.1); }
+    .clear-hist:active { transform: none; }
+
+    .history-empty {
+      text-align: center;
+      color: var(--muted);
+      font-size: .82rem;
+      padding: 16px 0;
+    }
+
+    .history-item {
+      background: var(--history-item);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 6px;
+      cursor: pointer;
+      transition: filter .15s;
+    }
+    .history-item:hover { filter: brightness(1.1); }
+    .history-item:last-child { margin-bottom: 0; }
+
+    .hist-expr {
+      font-size: .75rem;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .hist-result {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--display);
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="tabs">
+      <button class="tab active" onclick="switchMode('basic')">Basic</button>
+      <button class="tab" onclick="switchMode('sci')">Scientific</button>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()" id="theme-icon">🌙</button>
+  </div>
+
+  <!-- Calculator -->
+  <div class="calc">
+    <div class="display">
+      <div class="expr" id="expr"></div>
+      <div class="current" id="current">0</div>
+    </div>
+
+    <!-- Scientific buttons -->
+    <div class="sci-grid" id="sci-grid">
+      <button class="sci" onclick="sciFunc('sin')">sin</button>
+      <button class="sci" onclick="sciFunc('cos')">cos</button>
+      <button class="sci" onclick="sciFunc('tan')">tan</button>
+      <button class="sci" onclick="sciFunc('log')">log</button>
+      <button class="sci" onclick="sciFunc('ln')">ln</button>
+      <button class="sci" onclick="sciFunc('sqrt')">√</button>
+      <button class="sci" onclick="sciFunc('sq')">x²</button>
+      <button class="sci" onclick="sciFunc('inv')">1/x</button>
+    </div>
+
+    <!-- Basic grid -->
+    <div class="grid">
+      <button class="cl" onclick="clearAll()">AC</button>
+      <button class="cl" onclick="toggleSign()">+/−</button>
+      <button class="cl" onclick="percent()">%</button>
+      <button class="op" onclick="setOp('/')">÷</button>
+
+      <button onclick="input('7')">7</button>
+      <button onclick="input('8')">8</button>
+      <button onclick="input('9')">9</button>
+      <button class="op" onclick="setOp('*')">×</button>
+
+      <button onclick="input('4')">4</button>
+      <button onclick="input('5')">5</button>
+      <button onclick="input('6')">6</button>
+      <button class="op" onclick="setOp('-')">−</button>
+
+      <button onclick="input('1')">1</button>
+      <button onclick="input('2')">2</button>
+      <button onclick="input('3')">3</button>
+      <button class="op" onclick="setOp('+')">+</button>
+
+      <button onclick="input('0')" class="wide">0</button>
+      <button onclick="dot()">.</button>
+      <button class="eq" onclick="calculate()">=</button>
+    </div>
+  </div>
+
+  <!-- History -->
+  <div class="history-box">
+    <div class="history-header">
+      <span class="history-title">📝 History</span>
+      <button class="clear-hist" onclick="clearHistory()">Clear</button>
+    </div>
+    <div id="history-list">
+      <div class="history-empty">No calculations yet</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let current   = '0';
+  let prev      = '';
+  let operator  = null;
+  let resetNext = false;
+  let history   = [];
+  let mode      = 'basic';
+  let isDark    = true;
+
+  const currentEl  = document.getElementById('current');
+  const exprEl     = document.getElementById('expr');
+  const histList   = document.getElementById('history-list');
+  const sciGrid    = document.getElementById('sci-grid');
+
+  function updateDisplay() {
+    currentEl.textContent = current;
+    currentEl.classList.toggle('shrink', current.length > 9);
+  }
+
+  function input(val) {
+    if (resetNext) { current = val; resetNext = false; }
+    else current = current === '0' ? val : current + val;
+    if (current.length > 12) current = current.slice(0, 12);
+    updateDisplay();
+  }
+
+  function dot() {
+    if (resetNext) { current = '0.'; resetNext = false; updateDisplay(); return; }
+    if (!current.includes('.')) current += '.';
+    updateDisplay();
+  }
+
+  function setOp(op) {
+    if (operator && !resetNext) calculate(true);
+    prev = current;
+    operator = op;
+    resetNext = true;
+    const sym = {'+':'+', '-':'−', '*':'×', '/':'÷'}[op];
+    exprEl.textContent = `${prev} ${sym}`;
+  }
+
+  function calculate(chain = false) {
+    if (!operator || !prev) return;
+    const a = parseFloat(prev);
+    const b = parseFloat(current);
+    let result;
+    if (operator === '+') result = a + b;
+    else if (operator === '-') result = a - b;
+    else if (operator === '*') result = a * b;
+    else if (operator === '/') result = b === 0 ? null : a / b;
+
+    const sym = {'+':'+', '-':'−', '*':'×', '/':'÷'}[operator];
+    const exprStr = `${prev} ${sym} ${current}`;
+
+    if (result === null) {
+      current = 'Error';
+      exprEl.textContent = exprStr + ' =';
+      resetNext = true;
+      operator = null; prev = '';
+      updateDisplay();
+      return;
+    }
+
+    const resultStr = String(parseFloat(result.toFixed(10)));
+
+    if (!chain) {
+      exprEl.textContent = exprStr + ' =';
+      addHistory(exprStr, resultStr);
+      operator = null; prev = '';
+    }
+
+    current = resultStr;
+    resetNext = true;
+    updateDisplay();
+  }
+
+  function clearAll() {
+    current = '0'; prev = ''; operator = null; resetNext = false;
+    exprEl.textContent = '';
+    updateDisplay();
+  }
+
+  function toggleSign() {
+    if (current === '0' || current === 'Error') return;
+    current = current.startsWith('-') ? current.slice(1) : '-' + current;
+    updateDisplay();
+  }
+
+  function percent() {
+    if (current === 'Error') return;
+    current = String(parseFloat(current) / 100);
+    updateDisplay();
+  }
+
+  function sciFunc(fn) {
+    const val = parseFloat(current);
+    let result;
+    const toRad = v => v * Math.PI / 180;
+    if (fn === 'sin')  result = Math.sin(toRad(val));
+    else if (fn === 'cos')  result = Math.cos(toRad(val));
+    else if (fn === 'tan')  result = Math.tan(toRad(val));
+    else if (fn === 'log')  result = val <= 0 ? null : Math.log10(val);
+    else if (fn === 'ln')   result = val <= 0 ? null : Math.log(val);
+    else if (fn === 'sqrt') result = val < 0  ? null : Math.sqrt(val);
+    else if (fn === 'sq')   result = val * val;
+    else if (fn === 'inv')  result = val === 0 ? null : 1 / val;
+
+    const label = {sin:'sin',cos:'cos',tan:'tan',log:'log',ln:'ln',sqrt:'√',sq:'²',inv:'1/'}[fn];
+    const exprStr = `${label}(${current})`;
+
+    if (result === null) {
+      addHistory(exprStr, 'Error');
+      current = 'Error';
+    } else {
+      const resultStr = String(parseFloat(result.toFixed(10)));
+      addHistory(exprStr, resultStr);
+      current = resultStr;
+    }
+    exprEl.textContent = exprStr + ' =';
+    resetNext = true;
+    updateDisplay();
+  }
+
+  function addHistory(expr, result) {
+    history.unshift({ expr, result });
+    if (history.length > 20) history.pop();
+    renderHistory();
+  }
+
+  function renderHistory() {
+    if (history.length === 0) {
+      histList.innerHTML = '<div class="history-empty">No calculations yet</div>';
+      return;
+    }
+    histList.innerHTML = history.map((h, i) => `
+      <div class="history-item" onclick="useHistory(${i})">
+        <div class="hist-expr">${h.expr} =</div>
+        <div class="hist-result">${h.result}</div>
+      </div>
+    `).join('');
+  }
+
+  function useHistory(i) {
+    current = history[i].result;
+    resetNext = false;
+    updateDisplay();
+  }
+
+  function clearHistory() {
+    history = [];
+    renderHistory();
+  }
+
+  function switchMode(m) {
+    mode = m;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+    sciGrid.classList.toggle('show', m === 'sci');
+  }
+
+  function toggleTheme() {
+    isDark = !isDark;
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    document.getElementById('theme-icon').textContent = isDark ? '🌙' : '☀️';
+  }
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key >= '0' && e.key <= '9') input(e.key);
+    else if (e.key === '.') dot();
+    else if (e.key === '+') setOp('+');
+    else if (e.key === '-') setOp('-');
+    else if (e.key === '*') setOp('*');
+    else if (e.key === '/') { e.preventDefault(); setOp('/'); }
+    else if (e.key === 'Enter' || e.key === '=') calculate();
+    else if (e.key === 'Backspace') {
+      if (current.length > 1 && current !== 'Error') current = current.slice(0, -1);
+      else current = '0';
+      updateDisplay();
+    }
+    else if (e.key === 'Escape') clearAll();
+  });
+</script>
+</body>
+</html>
