@@ -312,7 +312,7 @@
     <!-- Basic grid -->
     <div class="grid">
       <button class="cl" onclick="clearAll()">AC</button>
-      <button class="cl" onclick="toggleSign()">+/−</button>
+      <button class="cl" onclick="backspace()">⌫</button>
       <button class="cl" onclick="percent()">%</button>
       <button class="op" onclick="setOp('/')">÷</button>
 
@@ -429,6 +429,13 @@
   function clearAll() {
     current = '0'; prev = ''; operator = null; resetNext = false;
     exprEl.textContent = '';
+    updateDisplay();
+  }
+
+  function backspace() {
+    if (current === 'Error') { current = '0'; updateDisplay(); return; }
+    if (current.length > 1) current = current.slice(0, -1);
+    else current = '0';
     updateDisplay();
   }
 
