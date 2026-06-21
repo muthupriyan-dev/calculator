@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Calc Pro</title>
   <style>
-.social-links{display:flex;justify-content:center;gap:12px;margin-top:6px;}
-.social-links a{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--btn);color:var(--muted);transition:background .15s,color .15s,transform .15s;}
-.social-links a:hover{background:var(--btn-op);color:var(--text);transform:translateY(-2px);} 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root[data-theme="dark"] {
@@ -279,6 +276,11 @@
       font-weight: 600;
       color: var(--display);
     }
+
+    /* ── Social links ── */
+    .social-links{display:flex;justify-content:center;gap:12px;margin-top:6px;}
+    .social-links a{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--btn);color:var(--muted);transition:background .15s,color .15s,transform .15s;}
+    .social-links a:hover{background:var(--btn-op);color:var(--text);transform:translateY(-2px);}
   </style>
 </head>
 <body>
@@ -291,22 +293,6 @@
       <button class="tab" onclick="switchMode('sci')">Scientific</button>
     </div>
     <button class="theme-btn" onclick="toggleTheme()" id="theme-icon">🌙</button>
-  </div>
-
-<!-- Social Links -->
-  <div class="social-links">
-    <a href="https://www.instagram.com/itz.muthuu?igsh=MXZiNGhqNmpoNGU1bw==" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
-    </a>
-    <a href="https://github.com/muthupriyan-dev" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-    </a>
-    <a href="mailto:smuthupriyan020108@gmail.com" aria-label="Email">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
-    </a>
-    <a href="https://www.linkedin.com/in/muthupriyan-s-b76698377" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-1.337-.025-3.063-1.867-3.063-1.868 0-2.133 1.459-2.133 2.968v5.699h-3v-11h2.879v1.508h.041c.401-.761 1.379-1.563 2.846-1.563 3.043 0 3.604 2.002 3.604 4.604v6.451z"/></svg>
-    </a>
   </div>
 
   <!-- Calculator -->
@@ -365,6 +351,22 @@
     <div id="history-list">
       <div class="history-empty">No calculations yet</div>
     </div>
+  </div>
+
+  <!-- Social Links -->
+  <div class="social-links">
+    <a href="https://www.instagram.com/itz.muthuu?igsh=MXZiNGhqNmpoNGU1bw==" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+    </a>
+    <a href="https://github.com/muthupriyan-dev" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+    </a>
+    <a href="mailto:smuthupriyan020108@gmail.com" aria-label="Email">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+    </a>
+    <a href="https://www.linkedin.com/in/muthupriyan-s-b76698377" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-1.337-.025-3.063-1.867-3.063-1.868 0-2.133 1.459-2.133 2.968v5.699h-3v-11h2.879v1.508h.041c.401-.761 1.379-1.563 2.846-1.563 3.043 0 3.604 2.002 3.604 4.604v6.451z"/></svg>
+    </a>
   </div>
 
 </div>
